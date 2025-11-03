@@ -41,8 +41,10 @@ jobs:
           export KUBECONFIG=kubeconfig.yaml
           kubectl version --client
 
-      - name: Deploy to Kubernetes
+        - name: Deploy to Kubernetes
         run: |
+          kubectl apply -f k8s/
+          kubectl rollout status deployment/springboot-deployment
           kubectl apply -f k8s/
           kubectl rollout status deployment/springboot-deployment
 
