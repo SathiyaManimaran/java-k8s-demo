@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: springboot-deployment
+  labels:
+    app: springboot-app
 spec:
   replicas: 1
   selector:
@@ -14,7 +16,8 @@ spec:
     spec:
       containers:
         - name: springboot-container
-          image: ghcr.io/USERNAME/java-k8s-demo:latest
+          # Replace USERNAME with your Docker Hub username or use secrets in CI/CD
+          image: 20142018/java-k8s-demo:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
