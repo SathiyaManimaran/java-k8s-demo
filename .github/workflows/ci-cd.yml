@@ -23,7 +23,7 @@ jobs:
         run: mvn clean package -DskipTests
 
       - name: Build Docker Image
-        run: docker build -t ghcr.io/${{ secrets.GHCR_USERNAME }}/springboot-docker-k8s:latest .
+        run: docker build -t ghcr.io/${{ secrets.GHCR_USERNAME }}/java-k8s-demo:latest .
 
       - name: Login to GitHub Container Registry
         run: echo ${{ secrets.GHCR_TOKEN }} | docker login ghcr.io -u ${{ secrets.GHCR_USERNAME }} --password-stdin
