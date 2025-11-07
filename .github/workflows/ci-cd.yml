@@ -33,13 +33,11 @@ jobs:
       - name: Push Docker image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/java-k8s-demo:latest
 
-      - name: Set up kubectl
-        run: |
-          echo "${{ secrets.KUBE_CONFIG }}" | base64 --decode > kubeconfig.yaml
-          export KUBECONFIG=kubeconfig.yaml
-          kubectl version --client
+   - name: Set up Kubernetes (KinD)
+        uses: helm/kind-action@v1.10.0
 
-      - name: Deploy to Kubernetes
-        run: |
-          kubectl apply -f k8s/
-          kubectl rollout status deployment/springboot-deployment
+      - name: Apply Kubernetes manifests
+        run: kubectl apply -f k8s/
+
+      - name: Verify resources
+        run: kubectl get all
