@@ -39,23 +39,29 @@ jobs:
       - name: Push Docker image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/java-k8s-demo:latest
 
-      # 7️⃣ Log in to OpenShift
+      # 7️⃣ Install OpenShift CLI
+      - name: Install OpenShift CLI
+        run: |
+          curl -L https://mirror.openshift.com/pub/openshift-v4/clients/oc/latest/linux/oc.tar.gz -o oc.tar.gz
+          tar -xvf oc.tar.gz -C /usr/local/bin oc
+          rm oc.tar.gz
+          oc version
+
+      # 8️⃣ Log in to OpenShift
       - name: Log in to OpenShift
         run: |
           oc login ${{ secrets.OPENSHIFT_SERVER }} --token=${{ secrets.OPENSHIFT_TOKEN }} --namespace=sathiyamanimaran-dev
 
-      # 8️⃣ Update OpenShift deployment
+      # 9️⃣ Update OpenShift deployment
       - name: Update OpenShift deployment
         run: |
           oc set image deployment/java-k8s-demo \
           java-k8s-demo=docker.io/${{ secrets.DOCKER_USERNAME }}/java-k8s-demo:latest \
           -n sathiyamanimaran-dev
-          
+
       # Optional: Kubernetes steps (KinD) – uncomment if needed
       # - name: Set up Kubernetes (KinD)
       #   uses: helm/kind-action@v1.10.0
 
       # - name: Apply Kubernetes manifests
       #   run: kubectl apply -f k8s/
-
-
