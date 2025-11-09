@@ -33,20 +33,25 @@ jobs:
 
       # 5️⃣ Build Docker image
       - name: Build Docker image
-        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/java-k8s-demo:latest .
+        run: |
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/java-k8s-demo:latest .
 
       # 6️⃣ Push Docker image
       - name: Push Docker image
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/java-k8s-demo:latest
+        run: |
+          docker push ${{ secrets.DOCKER_USERNAME }}/java-k8s-demo:latest
 
-      # 7️⃣ Set up Kubernetes using KinD (Kubernetes in Docker)
-      - name: Set up Kubernetes (KinD)
-        uses: helm/kind-action@v1.10.0
+      # Optional: Kubernetes steps (KinD) – uncomment if needed
+      # - name: Set up Kubernetes (KinD)
+      #   uses: helm/kind-action@v1.10.0
 
-      # 8️⃣ Apply Kubernetes manifests
-      - name: Apply Kubernetes manifests
-        run: kubectl apply -f k8s/
+      # - name: Apply Kubernetes manifests
+      #   run: kubectl apply -f k8s/
 
-      # 9️⃣ Verify resources
-      - name: Verify Kubernetes resources
-        run: kubectl get all
+      # - name: Verify Kubernetes resources
+      #   run: kubectl get all
+
+      # 7️⃣ Trigger OpenShift deployment
+      - name: Trigger OpenShift deployment
+        run: |
+          curl -X POST ${{ secrets.OPENSHIFT_WEBHOOK_URL }}
